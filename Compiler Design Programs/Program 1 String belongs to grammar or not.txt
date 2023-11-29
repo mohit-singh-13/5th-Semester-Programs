@@ -1,0 +1,53 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+    // grammar - abab*
+
+    string myString;
+    string temp;
+    bool flag = false;
+    
+    cout << "Enter string : ";
+    cin >> temp;
+    cout << endl;
+    int count = 0;
+    int length = temp.length();
+    
+    if (length >= 3) {
+        for (int i=0 ; i<length ; i++) {
+            if (temp[0]=='a' && count<1) {
+                myString.push_back(temp[i]);
+                count++;
+            }
+            else if (temp[1]=='b' && count<2) {
+                myString.push_back(temp[i]);
+                count++;
+            }
+            else if (temp[2]=='a' && count<3) {
+                myString.push_back(temp[i]);
+                count++;
+            }
+            else if (temp[i]=='b' && count>=3) {
+                myString.push_back(temp[i]);
+            }
+            else {
+                flag = true;
+                break;
+            }
+        }
+    }
+    else {
+        flag = true;
+    }
+    
+    if (flag) {
+        cout << "This string DOESN'T belong to the given grammar (abab*)" << endl;
+    }
+    else {
+        cout << "This string belongs to the given grammar (abab*)" << endl;
+    }
+    cout << endl;
+    
+    return 0;
+}

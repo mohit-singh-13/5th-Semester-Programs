@@ -1,0 +1,49 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+    char start;
+    cout << "Enter the Parent Non-Terminal : ";
+    cin >> start;
+
+    int nop;
+    cout << "Enter number of productions : ";
+    cin >> nop;
+
+    string productions[100];
+
+    for (int i=0 ; i<nop ; i++) {
+        cout << "Enter production " << i+1 << " : ";
+        cin >> productions[i];
+    }
+
+    cout << endl;
+    cout << "Grammar : " << endl;
+    cout << start << "->";
+    for (int i=0 ; i<nop ; i++) {
+        cout << productions[i] << "|";
+    }
+    cout << endl << endl;
+
+    for (int i=0 ; i<nop ; i++) {
+        int size = productions[i].size();
+        
+        for (int j=0 ; j<size ; j++) {
+            if (productions[i][j] == 'e') {
+                cout << "This is NOT an Operator Precedence Grammar" << endl << endl;
+                return 0;
+            }
+
+            if (productions[i][j]<=90 && productions[i][j]>=65) {
+                if (productions[i][j+1]<=90 && productions[i][j+1]>=65) {
+                    cout << "This is NOT an Operator Precedence Grammar" << endl << endl;
+                    return 0;
+                }
+            }
+        }
+    }
+
+    cout << "This is an Operator Precedence Grammar" << endl << endl;
+    
+    return 0;
+}

@@ -1,0 +1,51 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+int main()
+{  
+    string ip, temp;
+    int sizes[10] = {};
+    char c;
+    int n;
+    cout<<"Enter the Parent Non-Terminal : ";
+    cin>>c;
+    
+    ip.push_back(c);
+    ip = ip + "->";
+    
+    cout << endl;
+    cout<<"Enter the number of productions : ";
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {   cout<<"Enter Production "<<i+1<<" : ";
+        cin>>temp;
+        sizes[i] = temp.size();
+        ip = ip + temp;
+        if(i!=n-1){
+            ip = ip + "|";
+        }
+    }
+    
+    cout << endl;
+    cout<<"Production Rule : "<<ip<<endl;
+    cout << endl;
+    for(int i=0,k=3;i<n;i++)
+    {
+        if(ip[0] == ip[k])
+        {
+            cout<<"Production "<<i+1<<" has left recursion."<<endl;
+
+            k = k + sizes[i] + 1;
+        }
+        else
+        {
+            cout<<"Production "<<i+1<<" does not have left recursion."<<endl;
+
+            k = k + sizes[i] + 1;
+        }
+    }
+    cout << endl;
+
+    return 0;
+}
