@@ -1,0 +1,55 @@
+#include<iostream>
+#include<vector>
+#include<climits>
+using namespace std;
+
+// Function to perform matrix chain multiplication
+int matrixChainMultiplication(const vector<int> &dimensions)
+{
+    int n = dimensions.size() - 1; // Number of matrices
+
+    // Create a 2D vector to store the minimum number of scalar multiplications
+    vector<vector<int>> dp(n, vector<int>(n, INT_MAX));
+    // For a single matrix, the cost is 0
+    for (int i = 0; i < n; ++i)
+    {
+        dp[i][i] = 0;
+    }
+
+    // Iterate over the chain length
+    for (int chainLen = 2; chainLen <= n; ++chainLen)
+    {
+        for (int i = 0; i < n - chainLen + 1; ++i)
+        {
+            int j = i + chainLen - 1;
+            for (int k = i; k < j; ++k)
+            {
+                int cost = dp[i][k] + dp[k + 1][j] + dimensions[i] * dimensions[k + 1] * dimensions[j + 1];
+                dp[i][j] = min(dp[i][j], cost);
+            }
+        }
+    }
+
+    return dp[0][n - 1]; // Minimum cost for multiplying matrices from 1 to n
+}
+
+int main()
+{
+    int n;
+    // Input for the number of matrices
+    cout << "Enter the number of matrices: ";
+    cin >> n;
+    
+    vector<int> dimensions(n + 1); // Input for the dimensions of matrices
+    cout << "Enter the dimensions of matrices:\n";
+    for (int i = 0; i <= n; ++i)
+    {
+        cin >> dimensions[i];
+    }
+    
+    // Calculate and display the minimum number of scalar multiplications
+    int minMultiplications = matrixChainMultiplication(dimensions);
+    cout << "Minimum number of scalar multiplications: " << minMultiplications << endl;
+    
+    return 0;
+}

@@ -1,0 +1,50 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void compareAndSwap(int &a, int &b) {
+    if (a > b) {
+        swap(a, b);
+    }
+}
+
+void sortingNetwork(vector<int> &arr, int start, int size) {
+    if (size > 1) {
+        int half = size / 2;
+        for (int i = start; i + half < start + size; i++) {
+            compareAndSwap(arr[i], arr[i + half]);
+        }
+        sortingNetwork(arr, start, half);
+        sortingNetwork(arr, start + half, size - half);
+    }
+}
+
+void sort(vector<int> &arr, int size) {
+    for (int i = size ; i > 0 ; i--) {
+        for (int j = 0 ; j < size - i ; j += i) {
+            sortingNetwork(arr, j, i);
+        }
+    }
+}
+
+int main() {
+    vector<int> arr = {4, 2, 7, 1, 5, 6, 3, 8};
+    int size = arr.size();
+
+    cout << "Original array: ";
+    for (int num : arr) {
+        cout << num << " ";
+    }
+
+    cout << endl;
+
+    sort(arr, size);
+
+    cout << "Sorted array: ";
+    for (int num : arr) {
+        cout << num << " ";
+    }
+    cout << endl << endl;
+
+    return 0;
+}

@@ -1,0 +1,103 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+class NQueens
+{
+public:
+    NQueens(int n) : size(n)
+    {
+        board.resize(size, vector<int>(size, 0));
+    }
+    void solve()
+    {
+        if (placeQueens(0))
+        {
+            cout << "Solution found:\n";
+            printBoard();
+        }
+        else
+        {
+            cout << "Solution does not exist.\n";
+        }
+    }
+
+private:
+    int size;
+    vector<vector<int>> board;
+
+    // Function to check if a queen can be placed at the given position
+    bool isSafe(int row, int col)
+    {
+        // Check for queens in the same column
+        for (int i = 0; i < row; i++)
+        {
+            if (board[i][col] == 1)
+            {
+                return false;
+            }
+        }
+        // Check for queens in the left diagonal
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+        {
+            if (board[i][j] == 1)
+            {
+                return false;
+            }
+        }
+        // Check for queens in the right diagonal
+        for (int i = row, j = col; i >= 0 && j < size; i--, j++)
+        {
+            if (board[i][j] == 1)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    // Function to solve N-Queens problem using backtracking
+    bool placeQueens(int row)
+    {
+        if (row == size)
+        {
+            return true; // All queens are successfully placed
+        }
+        for (int col = 0; col < size; col++)
+        {
+            if (isSafe(row, col))
+            {
+                board[row][col] = 1; // Place queen at (row, col)
+                if (placeQueens(row + 1))
+                {
+                    return true;
+                }
+                board[row][col] = 0;
+            }
+        }
+        return false; // No safe position found for the current row
+    }
+    // Function to print the chessboard
+    void printBoard()
+    {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                cout << board[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main()
+{
+    int n;
+    cout << "Enter the size of the chessboard (N): ";
+    cin >> n;
+
+    NQueens nQueensProblem(n);
+    nQueensProblem.solve();
+    
+    return 0;
+}

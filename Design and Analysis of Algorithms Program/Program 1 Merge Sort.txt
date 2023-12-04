@@ -1,0 +1,81 @@
+#include<iostream>
+using namespace std;
+
+void merge(int arr[], int start, int end) {
+    int mid = start + (end - start) / 2;
+
+    int len1 = mid + 1 - start;
+    int len2 = end - mid;
+    int mainIndex = start;
+    
+    int *leftArr = new int[len1];
+    int *rightArr = new int[len2];
+    
+    for (int i=0 ; i<len1 ; i++) {
+        leftArr[i] = arr[mainIndex];
+        mainIndex++;
+    }
+    
+    for (int i=0 ; i<len2 ; i++) {
+        rightArr[i] = arr[mainIndex];
+        mainIndex++;
+    }
+    
+    mainIndex = start;
+    int i = 0;
+    int j = 0;
+    while (i<len1 && j<len2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[mainIndex] = leftArr[i];
+            i++;
+        }
+        else {
+            arr[mainIndex] = rightArr[j];
+            j++;
+        }
+        mainIndex++;
+    }
+    
+    while (i < len1) {
+        arr[mainIndex] = leftArr[i];
+        i++;
+        mainIndex++;
+    }
+    
+    while (j < len2) {
+        arr[mainIndex] = rightArr[j];
+        j++;
+        mainIndex++;
+    }
+    
+    delete [] leftArr;
+    delete [] rightArr;
+}
+
+void mergeSort(int arr[], int start, int end) {
+    // base case
+    if (start >= end) {
+        return;
+    }
+    
+    int mid = start + (end - start) / 2;
+    
+    mergeSort(arr, start, mid);
+    mergeSort(arr, mid+1, end);
+    
+    merge(arr, start, end);
+}
+
+int main() {
+    int arr[] = {2, 8, 1, 3, 6, 7, 5, 4};
+    int size = 8;
+
+    mergeSort(arr, 0, size-1);
+    
+    cout << "Sorted array : ";
+    for (int i=0 ; i<size ; i++) {
+        cout << arr[i] << " ";
+    }
+    
+    return 0;
+}
