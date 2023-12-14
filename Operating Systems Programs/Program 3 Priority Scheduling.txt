@@ -1,0 +1,98 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+    int process, at[10], bt[10], ct[10], tat[10], wt[10], priority[10], btTemp[10];
+    int p[10] = {1, 2, 3, 4, 5, 6, 7, 8 ,9, 10};
+    
+    cout << "Enter no. of processes (<=10) : ";
+    cin >> process;
+    cout << endl;
+    
+    cout << "Enter arrival time : " << endl;
+    for (int i=0 ; i<process ; i++) {
+        cout << "Arrival time of process " << i+1 << " : ";
+        cin >> at[i];
+    }
+    cout << endl;
+    
+    cout << "Enter burst time : " << endl;
+    for (int i=0 ; i<process ; i++) {
+        cout << "Burst time of process " << i+1 << " : ";
+        cin >> bt[i];
+        btTemp[i] = bt[i];
+    }
+    cout << endl;
+
+    cout << "Enter priority of processes : " << endl;
+    for (int i=0 ; i<process ; i++) {
+        cout << "Priority of process " << i+1 << " : ";
+        cin >> priority[i];
+    }
+    cout << endl;
+
+    // calculating Completion Time
+    bool flag = true;
+    int j = 1;
+    int compTime = 0;
+
+    int maxi = 0;
+    
+    while (flag == true) {
+        if (priority[maxi]<priority[j] && compTime>=at[j]) {
+            maxi = j;
+            j++;
+        }
+
+        compTime = compTime + 1;
+        btTemp[maxi] = btTemp[maxi] - 1;
+        ct[maxi] = compTime;
+
+        while (btTemp[maxi] == 0) {
+            maxi--;
+        }
+
+        if (j==process-1 && btTemp[j]==0) {
+            j = maxi - 1;
+        }
+
+        int count = 0;
+        for (int i=0 ; i<process ; i++) {
+            if (btTemp[i] == 0) {
+                count++;
+            }
+        }
+        if (count == process) {
+            flag = false;
+        }
+    }
+
+    // calculating Turn Aroung Time and Waiting Time
+    for (int i=0 ; i<process ; i++) {
+        tat[i] = ct[i] - at[i];
+        wt[i] = tat[i] - bt[i];
+    }
+
+    // calculating Average TAT and Average WT
+    float sum1=0, sum2=0;
+    for (int i=0 ; i<process ; i++) {
+        sum1 += tat[i];
+
+        sum2 += wt[i];
+    }
+
+    float avgTat = sum1 / process;
+    float avgWt = sum2 / process;
+
+    cout << "Process \tPriority\tAT\tBT\tCT\tTAT\tWT" << endl;
+    for (int i=0 ; i<process ; i++) {
+        cout << p[i] << "\t\t" << priority[i] << "\t\t" << at[i] << "\t" << bt[i] << "\t" << ct[i] << "\t" << tat[i] << "\t" << wt[i] << endl;
+    }
+    cout << endl;
+
+    cout << "Average TAT : " << avgTat << endl;
+    cout << "Average WT : " << avgWt << endl;
+    cout << endl;
+
+    return 0;
+}
