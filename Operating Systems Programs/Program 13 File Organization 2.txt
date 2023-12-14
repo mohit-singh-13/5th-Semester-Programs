@@ -1,0 +1,65 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct Index
+{
+    int rollNumber;
+    long offset;
+};
+
+struct Student
+{
+    int rollNumber;
+    char name[50];
+    float marks;
+};
+
+int main()
+{
+    FILE *file, *indexFile;
+    struct Student student;
+    struct Index index;
+
+    file = fopen("studentsIndexed.dat", "w+b"); // Writing records to an indexed file
+    indexFile = fopen("indexFile.dat", "w+b");
+    if (file == NULL || indexFile == NULL)
+    {
+        perror("Error opening file");
+        return 1;
+    }
+
+    for (int i = 1; i <= 5; ++i)
+    {
+        student.rollNumber = i;
+        sprintf(student.name, "Student%d", i);
+        student.marks = 75.5 + i;
+        fwrite(&student, sizeof(struct Student), 1, file);
+        index.rollNumber = i;
+        index.offset = ftell(file) - sizeof(struct Student); // Record offset in the data file
+        fwrite(&index, sizeof(struct Index), 1, indexFile);
+    }
+
+    fclose(file);
+    fclose(indexFile);
+    
+    file = fopen("studentsIndexed.dat", "rb"); // Reading records from an indexed file
+    indexFile = fopen("indexFile.dat", "rb");
+    if (file == NULL || indexFile == NULL)
+    {
+        perror("Error opening file");
+        return 1;
+    }
+
+    printf("Indexed File Contents:\n");
+    while (fread(&index, sizeof(struct Index), 1, indexFile) == 1)
+    {
+        fseek(file, index.offset, SEEK_SET);
+        fread(&student, sizeof(struct Student), 1, file);
+        printf("Roll Number: %d, Name: %s, Marks: %.2f\n", student.rollNumber, student.name, student.marks);
+    }
+
+    fclose(file);
+    fclose(indexFile);
+    
+    return 0;
+}
